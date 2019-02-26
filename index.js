@@ -25,7 +25,7 @@ app.post('/opensite', async (req, res) => {
             await page.goto(body.site);
 
             //tag che vogliamo riconoscere
-            let componentList = [{component: "list", tag: ['ul', 'ol', '[role="list"]']}, {component: "table", tag: ['table']}, {component: "link", tag: ['a']}, {component: "form", tag: ['form']}];
+            let componentList = [{component: "list", tag: ['ul', 'ol', '[role="list"]']}, {component: "table", tag: ['table']}, {component: "form", tag: ['form']}];
             let structure = [];
             //prendiamo la struttura del sito composta da component e resources
             for (let i = 0; i < componentList.length; i++) {
@@ -34,6 +34,7 @@ app.post('/opensite', async (req, res) => {
                 }
             }
 
+            //ritorno anche il link del sito aperto, nell'implementazione attuale non viene più usato
             let structureToSend = {site: body.site, structure: structure};
 
             res.json(structureToSend);
