@@ -25,16 +25,17 @@ app.post('/opensite', async (req, res) => {
             await page.goto(body.site);
 
             //tag che vogliamo riconoscere
-            let componentList = [{component: "list", tag: ['ul', 'ol', '[role="list"]']}, {component: "table", tag: ['table']}, {component: "link", tag: ['a']}, {component: "form", tag: ['form']}];
+            let componentList = [{component: "list", tag: ['ul', 'ol', '[role="list"]']}, {component: "table", tag: ['table']}, {component: "form", tag: ['form']}];
             let structure = [];
             //prendiamo la struttura del sito composta da component e resources
             for (let i = 0; i < componentList.length; i++) {
                 for (let j = 0; j < componentList[i].tag.length; j++) {
-                    await MY_FUNCTIONS.listFunc(page, structure, componentList[i].component, componentList[i].tag[j]);
+                    //prende ogni component costituito dallo stesso tag in una chiamata, ex: 'ul'
+                    await MY_FUNCTIONS.compFunc(page, structure, componentList[i].component, componentList[i].tag[j]);
                 }
             }
 
-            let structureToSend = {site: body.site, structure: structure};
+            let structureToSend = {structure: structure};
 
             res.json(structureToSend);
         } catch (error) {
