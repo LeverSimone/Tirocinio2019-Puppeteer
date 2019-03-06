@@ -35,7 +35,7 @@ app.post('/opensite', async (req, res) => {
                 }
             }
 
-            let structureToSend = {structure: structure};
+            let structureToSend = {intents: structure};
 
             res.json(structureToSend);
         } catch (error) {
