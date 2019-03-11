@@ -29,7 +29,7 @@ async function compFunc(page, structure, component, tag) {
             }
         }
 
-        structure.push({ component: component, resource: resources[i], attributes: attributes, tag: tag });
+        structure.push({ component: component, resource: resources[i], attributes: attributes, selector: tag });
     }
 }
 
