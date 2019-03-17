@@ -11,12 +11,12 @@ async function compFunc(page, structure, component, tag) {
         resources[i] = await page.evaluate((obj) => { return obj.getAttribute('bot-resource'); }, node[i]);
 
         //prendo i nodi con bot-attr e prendo gli attributes per ogni nodo, controllo che un determinato attributes non sia già stato letto
-        attrNode = await node[i].$$('[bot-attr]');
+        attrNode = await node[i].$$('[bot-attribute]');
         let cont = 0;
         attributes = [];
         for (let j = 0; j < attrNode.length; j++) {
             //prendo il valore del bot-attr per questo nodo
-            temp = await page.evaluate((obj) => { return obj.getAttribute('bot-attr'); }, attrNode[j]);
+            temp = await page.evaluate((obj) => { return obj.getAttribute('bot-attribute'); }, attrNode[j]);
             cont = 0;
             for (let k = 0; k < attributes.length; k++) {
                 if (temp != attributes[k]) {
