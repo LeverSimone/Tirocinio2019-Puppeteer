@@ -19,13 +19,13 @@ async function compFunc(page, structure, component, tag) {
             temp = await page.evaluate((obj) => { return obj.getAttribute('bot-attribute'); }, attrNode[j]);
             cont = 0;
             for (let k = 0; k < attributes.length; k++) {
-                if (temp != attributes[k]) {
+                if (temp != attributes[k].name) {
                     cont++;
                 }
             }
             //se è true non è presente negli attributes già trovati, inserisco
             if (cont == attributes.length) {
-                attributes[j] = temp;
+                attributes.push({name: temp, selector: '[bot-attribute='+temp+']'})
             }
         }
 
