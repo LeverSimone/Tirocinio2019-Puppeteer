@@ -10,6 +10,11 @@ async function compFunc(page, structure, component, tag) {
         //prendo le resource per ogni nodo
         resources[i] = await page.evaluate((obj) => { return obj.getAttribute('bot-resource'); }, node[i]);
 
+        //prendo classe e id dal nodo per usarli per identificarlo
+        let clas = await page.evaluate((obj) => { return obj.getAttribute('class'); }, node[i]);
+        let id = await page.evaluate((obj) => { return obj.id; }, node[i]);
+        let tagName = await page.evaluate((obj) => { return obj.tagName; }, node[i]);
+
         //prendo i nodi con bot-attr e prendo gli attributes per ogni nodo, controllo che un determinato attributes non sia già stato letto
         attrNode = await node[i].$$('[bot-attribute]');
         let cont = 0;
@@ -29,7 +34,14 @@ async function compFunc(page, structure, component, tag) {
             }
         }
 
-        structure.push({ component: component, resource: resources[i], attributes: attributes, selector: tag });
+        //inserisco la classe, id, NomeTag per riconoscere meglio il nodo
+        let tagToUse = tagName;
+
+        if(tag == '[role=\'list\']') {  tagToUse += tag;    }
+        if(id) {  tagToUse += "#"+id;    }
+        if(clas) {  tagToUse += "."+clas;    }
+
+        structure.push({ component: component, resource: resources[i], attributes: attributes, selector: tagToUse });
     }
 }
 
