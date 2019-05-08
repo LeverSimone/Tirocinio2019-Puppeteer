@@ -24,7 +24,7 @@ app.post('/opensite', async (req, res) => {
             //apro il sito
             await page.goto(body.site);
             //tag che vogliamo riconoscere
-            let componentList = [{component: "list", tag: ['ul', 'ol', '[role=\'list\']']}, {component: "table", tag: ['table']}, {component: "form", tag: ['form']}];
+            let componentList = [{component: "list", tag: ['ul', 'ol', '[role=list]', '[bot-component=list]']}, {component: "table", tag: ['table']}, {component: "form", tag: ['form']}];
             let structure = [];
             //prendiamo la struttura del sito composta da component e resources
             for (let i = 0; i < componentList.length; i++) {

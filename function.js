@@ -4,11 +4,14 @@ async function compFunc(page, structure, component, tag) {
 
     let resources = [];
     let attributes = [];
-
+    let category;
     let temp = null;
     for (let i = 0; i < node.length; i++) {
         //prendo le resource per ogni nodo
         resources[i] = await page.evaluate((obj) => { return obj.getAttribute('bot-resource'); }, node[i]);
+
+        //prendo la category se esiste per quel nodo
+        category = await page.evaluate((obj) => { return obj.getAttribute('bot-type'); }, node[i]);
 
         //prendo i nodi con bot-attr e prendo gli attributes per ogni nodo, controllo che un determinato attributes non sia già stato letto
         attrNode = await node[i].$$('[bot-attribute]');
@@ -31,32 +34,38 @@ async function compFunc(page, structure, component, tag) {
 
         let containerSelector = await takeSelector(node[i], tag, page);
 
-        //inserisco item in selector
+        //inserisco item in selector, per list
         let itemSelector = [];
-        if (tag == 'ul' || tag == 'ol') {
-            itemSelector.push('LI')
-        } else {
-            let itemNodes = await node[i].$$('[role="listitem"]');
+        if (component == "list") {
+            if (tag == 'ul' || tag == 'ol') {
+                itemSelector.push('LI')
+            } else {
+                let itemNodes;
+                if(tag=='[role=list]')
+                    itemNodes = await node[i].$$('[role=listitem]');
+                else
+                    itemNodes = await node[i].$$('[bot-item]');
 
-            //ciclo sui nodi per prendere i vari tipi di tag contenenti item che ci possono essere
-            for (let i = 0; i < itemNodes.length; i++) {
-                let itemSelectorTemp = await takeSelector(itemNodes[i], null, page);
-                //controllo che non sia già presente
-                let contItem = 0;
-                for (let j = 0; j < itemSelector.length; j++) {
-                    if (itemSelectorTemp != itemSelector[j]) {
-                        contItem++;
+                //ciclo sui nodi per prendere i vari tipi di tag contenenti item che ci possono essere
+                for (let i = 0; i < itemNodes.length; i++) {
+                    let itemSelectorTemp = await takeSelector(itemNodes[i], null, page);
+                    //controllo che non sia già presente
+                    let contItem = 0;
+                    for (let j = 0; j < itemSelector.length; j++) {
+                        if (itemSelectorTemp != itemSelector[j]) {
+                            contItem++;
+                        }
+                    }
+                    //se è true non è presente nei selector degli item già trovati, inserisco
+                    if (contItem == itemSelector.length) {
+                        itemSelector.push(itemSelectorTemp);
                     }
                 }
-                //se è true non è presente nei selector degli item già trovati, inserisco
-                if (contItem == itemSelector.length) {
-                    itemSelector.push(itemSelectorTemp);
-                }
-            }
 
+            }
         }
 
-        structure.push({ component: component, resource: resources[i], attributes: attributes, selector: { container: containerSelector, item: itemSelector } });
+        structure.push({ component: component, resource: resources[i], category: category, attributes: attributes, selector: { container: containerSelector, item: itemSelector } });
     }
 }
 
