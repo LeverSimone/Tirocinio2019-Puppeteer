@@ -11,7 +11,7 @@ async function compFunc(page, structure, component, tag) {
         resources[i] = await page.evaluate((obj) => { return obj.getAttribute('bot-resource'); }, node[i]);
 
         //prendo la category se esiste per quel nodo
-        category = await page.evaluate((obj) => { return obj.getAttribute('bot-type'); }, node[i]);
+        category = await page.evaluate((obj) => { return obj.getAttribute('bot-category'); }, node[i]);
 
         //prendo i nodi con bot-attr e prendo gli attributes per ogni nodo, controllo che un determinato attributes non sia già stato letto
         attrNode = await node[i].$$('[bot-attribute]');
