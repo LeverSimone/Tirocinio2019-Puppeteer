@@ -84,6 +84,10 @@ app.post('/checkstructure', async (req, res) => {
             await page.goto(body.site.id);
             console.log(body.site.id);
             let node = await page.$(selector);
+            //let content = await page.$eval(selector, item => item.innerText);
+            //console.log("content");
+            //console.log(content);
+            //console.log(node.inner);
             //console.log(node);
             if (node != null) {
                 /*attributes.forEach(async (element) => {
@@ -102,6 +106,9 @@ app.post('/checkstructure', async (req, res) => {
                     console.log(attributes[i].selector)
                     console.log("node")
                     node = await page.$(attributes[i].selector);
+                    //content = await page.$eval(attributes[i].selector, item => item.innerText);
+                    //console.log("content");
+                    //console.log(content);
                     console.log("node await")
                     console.log(node)
                     if (node != null) {
@@ -112,7 +119,7 @@ app.post('/checkstructure', async (req, res) => {
                 console.log(attributes)
                 console.log(attributes.length)
 
-                if(count==attributes.length)
+                if (count == attributes.length)
                     result = true;
             }
         }
