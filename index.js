@@ -55,7 +55,7 @@ app.post('/checkstructure', async (req, res) => {
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     if (body.site.id) {
-        //try {
+        try {
         //l'oggetto contiene un id e il resto è la stessa struttura degli oggetti salvati in MongoDB
         let articleFound = false;
         let selector;
@@ -75,62 +75,32 @@ app.post('/checkstructure', async (req, res) => {
             }
         });
 
-        console.log(articleFound);
-        console.log(selector);
-        console.log(attributes);
         let count = 0;
         if (articleFound) {
             //open the site
             await page.goto(body.site.id);
-            console.log(body.site.id);
             let node = await page.$(selector);
             //let content = await page.$eval(selector, item => item.innerText);
-            //console.log("content");
-            //console.log(content);
-            //console.log(node.inner);
-            //console.log(node);
             if (node != null) {
-                /*attributes.forEach(async (element) => {
-                    console.log("element")
-                    console.log(element.selector)
-                    console.log("node")
-                    node = await page.$(element.selector);
-                    console.log("node await")
-                    console.log(node)
-                    if (node != null) {
-                        count++;
-                    }
-                });*/
                 for (let i = 0; i < attributes.length; i++) {
-                    console.log("element")
-                    console.log(attributes[i].selector)
-                    console.log("node")
                     node = await page.$(attributes[i].selector);
                     //content = await page.$eval(attributes[i].selector, item => item.innerText);
-                    //console.log("content");
-                    //console.log(content);
-                    console.log("node await")
-                    console.log(node)
                     if (node != null) {
                         count++;
                     }
                 }
-                console.log(count)
-                console.log(attributes)
-                console.log(attributes.length)
 
                 if (count == attributes.length)
                     result = true;
             }
         }
 
-        console.log(result);
         //il sito è un article
         res.json({ "result": result });
 
-        /*} catch (error) {
+        } catch (error) {
             res.status(400).send(error);
-        }*/
+        }
     }
     else {
         res.status(400).send("You have to send a link with his structure");
