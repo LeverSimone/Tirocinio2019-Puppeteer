@@ -79,8 +79,15 @@ app.post('/checkstructure', async (req, res) => {
         if (articleFound) {
             //open the site
             await page.goto(body.site.id);
-            let node = await page.$(selector);
-            //let content = await page.$eval(selector, item => item.innerText);
+            let notFound = true;
+            let node;
+            for (let i = 0; i < selector.length && notFound; i++) {
+                node = await page.$(selector[i]);
+                //content = await page.$eval(selector[i], item => item.innerText);
+                if (node != null) {
+                    notFound = false;
+                }
+            }
             if (node != null) {
                 for (let i = 0; i < attributes.length; i++) {
                     node = await page.$(attributes[i].selector);
