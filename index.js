@@ -20,12 +20,13 @@ app.post('/opensite', async (req, res) => {
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     if (body.site) {
-        try {
+        //try {
+            //viene passato al metodo dove vengono aggiunti gli elementi, si troveranno infine qui gli elementi aggiunti senza return
+            let structure = [];
             //apro il sito
             await page.goto(body.site);
             //tag che vogliamo riconoscere
             let componentList = [{ component: "list", tag: ['ul', 'ol', '[role=list]', '[bot-component=list]'] }, { component: "table", tag: ['table'] }, { component: "form", tag: ['form'] }];
-            let structure = [];
             //prendiamo la struttura del sito composta da component e resources
             for (let i = 0; i < componentList.length; i++) {
                 for (let j = 0; j < componentList[i].tag.length; j++) {
@@ -36,9 +37,9 @@ app.post('/opensite', async (req, res) => {
             let structureToSend = { intents: structure };
 
             res.json(structureToSend);
-        } catch (error) {
-            res.status(400).send(error);
-        }
+        //} catch (error) {
+            //res.status(400).send(error);
+        //}
     }
     else {
         res.status(400).send("You have to send a site");
