@@ -1,5 +1,6 @@
 async function form(page, structure, component, tag, node) {
     //per gestire più form uso un for
+    let resources = [];
     for (let i = 0; i < node.length; i++) {
         //estraggo la resource del form, ad esempio datiUtente
         resources[i] = await page.evaluate((obj) => { return obj.getAttribute('bot-resource'); }, node[i]);
